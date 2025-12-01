@@ -11,6 +11,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, List, Sequence
+codex/create-dream-interpretation-chatbot
+import argparse
+
+master
 import re
 import sys
 
@@ -128,10 +132,59 @@ class DreamInterpreter:
         return re.sub(r"\s+", " ", text).strip()
 
 
+codex/create-dream-interpretation-chatbot
+def _build_arg_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description=(
+            "Answer dream questions using the bundled Tafseer Ahlam PDF. "
+            "Run interactively with no arguments or pass a single question "
+            "via --question."
+        )
+    )
+    parser.add_argument(
+        "-q",
+        "--question",
+        help="Ask one question non-interactively and print the answer.",
+    )
+    parser.add_argument(
+        "--top",
+        type=int,
+        default=3,
+        help="Number of snippets to return for each question (default: 3).",
+    )
+    parser.add_argument(
+        "--chunk-size",
+        type=int,
+        default=900,
+        help="Characters per chunk when indexing the PDF (default: 900).",
+    )
+    parser.add_argument(
+        "--book",
+        type=Path,
+        default=BOOK_PATH,
+        help="Path to the Tafseer Ahlam PDF (default: bundled file).",
+    )
+    return parser
+
+
+def _run_cli(argv: Sequence[str] | None = None) -> None:
+    parser = _build_arg_parser()
+    args = parser.parse_args(list(argv) if argv is not None else None)
+
+    interpreter = DreamInterpreter(book_path=args.book, chunk_size=args.chunk_size)
+    print("Building index from the dream interpretation book...", file=sys.stderr)
+    interpreter.load()
+
+    if args.question:
+        print(interpreter.answer(args.question, top_n=args.top))
+        return
+
+
 def _run_cli() -> None:
     interpreter = DreamInterpreter()
     print("Building index from the dream interpretation book...", file=sys.stderr)
     interpreter.load()
+master
     print("جاهز للإجابة. اكتب 'quit' أو 'exit' للخروج.\n")
 
     while True:
@@ -144,7 +197,11 @@ def _run_cli() -> None:
         if question.lower() in {"quit", "exit"}:
             break
 
+codex/create-dream-interpretation-chatbot
+        answer = interpreter.answer(question, top_n=args.top)
+
         answer = interpreter.answer(question)
+master
         print(f"\n{answer}\n")
 
 
