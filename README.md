@@ -22,6 +22,7 @@ Run the chatbot and ask your question in Arabic or English. Type `quit` or
 python dreams_chatbot.py
 ```
 
+codex/create-dream-interpretation-chatbot
 You can also run a single, non-interactive query (helpful if you only want to
 grab a quick answer):
 
@@ -33,5 +34,7 @@ If the PDF is in a different location, point the script to it with
 `--book /path/to/file.pdf`. Use `--top` to adjust how many snippets are
 returned and `--chunk-size` to control how the PDF is split for indexing.
 
+
+master
 The bot will search the book for the most relevant passages and return short
 excerpts with page numbers.

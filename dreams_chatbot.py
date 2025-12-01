@@ -11,7 +11,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, List, Sequence
+codex/create-dream-interpretation-chatbot
 import argparse
+
+master
 import re
 import sys
 
@@ -129,6 +132,7 @@ class DreamInterpreter:
         return re.sub(r"\s+", " ", text).strip()
 
 
+codex/create-dream-interpretation-chatbot
 def _build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
@@ -175,6 +179,12 @@ def _run_cli(argv: Sequence[str] | None = None) -> None:
         print(interpreter.answer(args.question, top_n=args.top))
         return
 
+
+def _run_cli() -> None:
+    interpreter = DreamInterpreter()
+    print("Building index from the dream interpretation book...", file=sys.stderr)
+    interpreter.load()
+master
     print("جاهز للإجابة. اكتب 'quit' أو 'exit' للخروج.\n")
 
     while True:
@@ -187,7 +197,11 @@ def _run_cli(argv: Sequence[str] | None = None) -> None:
         if question.lower() in {"quit", "exit"}:
             break
 
+codex/create-dream-interpretation-chatbot
         answer = interpreter.answer(question, top_n=args.top)
+
+        answer = interpreter.answer(question)
+master
         print(f"\n{answer}\n")
 
 
